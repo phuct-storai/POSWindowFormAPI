@@ -19,7 +19,7 @@ namespace POSWindowFormAPI.Data.Repositories
         {
             if (_connection == null || _connection.State != ConnectionState.Open)
             {
-                _connection = new SqlConnection(_configuration.GetConnectionString("SecondConnection"));
+                _connection = new SqlConnection(_configuration.GetConnectionString("PhoSaiGonConnection"));
                 _connection.Open();
             }
 
@@ -28,7 +28,7 @@ namespace POSWindowFormAPI.Data.Repositories
 
         public IDbConnection GetNewConnection()
         {
-            return new SqlConnection(_configuration.GetConnectionString("SecondConnection"));
+            return new SqlConnection(_configuration.GetConnectionString("PhoSaiGonConnection"));
         }
 
         /// <summary>
