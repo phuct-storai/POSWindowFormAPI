@@ -66,7 +66,12 @@ namespace POSWindowFormAPI.Controllers
                     return Ok("Login Success - " + authenticationRequest.Username);
                 return BadRequest("Login Failed! Check again with this user: " + authenticationRequest.Username);
             }
-            
+        }
+
+        [HttpPost("forgot-password")]
+        public ActionResult ForgotPassword()
+        {
+            return Ok();
         }
     }
 }

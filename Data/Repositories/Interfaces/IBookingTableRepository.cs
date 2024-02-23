@@ -8,8 +8,12 @@ namespace POSWindowFormAPI.Data.Repositories.Interfaces
 
         public string UpdateBooking(string name, BookingTableDetail bookingTableDetail);
         public string DeleteBooking(string username);
-        public bool GetByUsername(string username);
-        public bool GetByName(string name);
+        public bool GetBookingByUsername(string username);
+        public bool GetBookingByName(string name);
+
+        public string AddAnniversaryType(AnniversaryType anniversaryType);
+        public string GetAnniversaryTypes();
+        public string GetAnniversaryTypeByName(string typeName);
 
     }
 }

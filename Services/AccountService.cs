@@ -43,12 +43,12 @@ namespace POSWindowFormAPI.Services
             var result = _accountRepository.CreateAccount(authenticationRequest);
             if (result == AuthenticaticalConstants.SUCCESS)
                 tracking.Status = TrackingConstant.SUCCESS;
-            else if (result)
+            else if (result == AuthenticaticalConstants.EXITS_USERNAME)
                 tracking.Status = TrackingConstant.FAILED;
 
             _trackingRepository.AddTracking(tracking);
 
-            return tracking.Status;
+            return result;
         }
 
         public bool UpdateAccount(string username, AuthenticationRequest authenticationRequest)
