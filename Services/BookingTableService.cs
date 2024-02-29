@@ -1,10 +1,12 @@
-﻿using POSWindowFormAPI.Controllers;
+﻿using Microsoft.Extensions.Configuration;
+using POSWindowFormAPI.Controllers;
 using POSWindowFormAPI.Data.Constants;
 using POSWindowFormAPI.Data.Repositories;
 using POSWindowFormAPI.Data.Repositories.Interfaces;
 using POSWindowFormAPI.Models;
 using POSWindowFormAPI.Models.Request;
 using POSWindowFormAPI.Services.Interfaces;
+using System.Data;
 
 namespace POSWindowFormAPI.Services
 {
@@ -13,13 +15,22 @@ namespace POSWindowFormAPI.Services
         private readonly ILogger<BookingController> _logger;
         private readonly IBookingTableRepository _bookingTableRepository;
         private readonly ITrackingRepository _trackingRepository;
+        private readonly IConfiguration _configuration;
+
         public BookingTableService(ILogger<BookingController> logger,
                     IBookingTableRepository bookingTableRepository,
-                    ITrackingRepository trackingRepository)
+                    ITrackingRepository trackingRepository,
+                    IConfiguration configuration)
         {
             _logger = logger;
             _bookingTableRepository = bookingTableRepository;
             _trackingRepository = trackingRepository;
+            _configuration = configuration;
+        }
+
+        public string GetAllBookings()
+        {
+            return _bookingTableRepository.GetAllBookings(DateTime.Now.ToString("d"));
         }
 
         public string CreateBooking(BookingTableDetail bookingTableDetail)

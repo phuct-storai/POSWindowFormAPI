@@ -32,7 +32,11 @@ namespace POSWindowFormAPI.Controllers
             _sqlConnectionFactory = sqlConnectionFactory;
             _bookingTableRepository = bookingTableRepository;
         }
-
+        [HttpGet("get-all-bookings")]
+        public string GetAllBookings()
+        {
+            return _bookingTableService.GetAllBookings();
+        }
 
         [HttpGet("get-by-username")]
         public bool GetByUsername(string username)
