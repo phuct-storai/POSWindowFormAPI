@@ -4,6 +4,7 @@ namespace POSWindowFormAPI.Data.Repositories.Interfaces
 {
     public interface IBookingTableRepository
     {
+        public string GetAllBookings(string today);
         public string CreateBooking(BookingTableDetail bookingTableDetail);
 
         public string UpdateBooking(string name, BookingTableDetail bookingTableDetail);

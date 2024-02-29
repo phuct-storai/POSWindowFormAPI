@@ -25,6 +25,21 @@ namespace POSWindowFormAPI.Data.Repositories
 
         // Booking Table
 
+        public string GetAllBookings(string today)
+        {
+            //List<string> bookingList = new List<string>();
+            string query = "SELECT Name, People, PhoneNumber, Date, Time, Status " +
+                "FROM [dbo].[Bookings]" +
+                $"WHERE Date = {today}" +
+                "ORDER BY Date DESC, Time DESC";
+            using (IDbConnection connection = _sqlConnectionFactory.GetNewConnection())
+            {
+                var bookingList = connection.ExecuteAsync(query);
+            }
+            return "Nice";
+        }
+
+
         public bool GetBookingByUsername(string username)
         {
             string query = $"SELECT * FROM [dbo].[PSG_Bookings] WHERE Username = '{username}'";
