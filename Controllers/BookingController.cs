@@ -57,10 +57,11 @@ namespace POSWindowFormAPI.Controllers
             _bookingTableService.UpdateBooking(name, bookingTableRequest);
         }
 
-        [HttpDelete("delete-booking")]
-        public void DeleteBooking([FromBody] BookingTableRequest bookingTableRequest)
+        [HttpDelete("delete-booking/{name}-{phoneNumber}-{date}")]
+        public ActionResult DeleteBooking([FromRoute] BookingTableRequest bookingTableRequest)
         {
             _bookingTableService.DeleteBooking(bookingTableRequest);
+            return Ok("OK");
         }
 
         [HttpGet("get-anniversary-type")]

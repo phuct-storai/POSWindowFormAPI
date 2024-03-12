@@ -1,4 +1,5 @@
 ﻿using POSWindowFormAPI.Models;
+using POSWindowFormAPI.Models.Request;
 
 namespace POSWindowFormAPI.Data.Repositories.Interfaces
 {
@@ -8,7 +9,7 @@ namespace POSWindowFormAPI.Data.Repositories.Interfaces
         public string CreateBooking(BookingTableDetail bookingTableDetail);
 
         public string UpdateBooking(string name, BookingTableDetail bookingTableDetail);
-        public string DeleteBooking(string username);
+        public string DeleteBooking(BookingTableRequest bookingTableRequest);
         public bool GetBookingByUsername(string username);
         public bool GetBookingByName(string name);
 
