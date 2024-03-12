@@ -10,6 +10,7 @@ using POSWindowFormAPI.Services.Interfaces;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 
 namespace POSWindowFormAPI.Controllers
 {
@@ -33,9 +34,9 @@ namespace POSWindowFormAPI.Controllers
             _bookingTableRepository = bookingTableRepository;
         }
         [HttpGet("get-all-bookings")]
-        public string GetAllBookings()
+        public async Task<string> GetAllBookings()
         {
-            return _bookingTableService.GetAllBookings();
+            return await _bookingTableService.GetAllBookings();
         }
 
         [HttpGet("get-by-username")]
@@ -47,7 +48,7 @@ namespace POSWindowFormAPI.Controllers
         public ActionResult CreateBooking([FromBody] BookingTableRequest bookingTableRequest)
         {
             _bookingTableService.CreateBooking(bookingTableRequest);
-            return Ok();
+            return Ok("SUCCESS");
         }
 
         [HttpPut("update-booking")]
@@ -57,9 +58,9 @@ namespace POSWindowFormAPI.Controllers
         }
 
         [HttpDelete("delete-booking")]
-        public void DeleteBooking(string username)
+        public void DeleteBooking([FromBody] BookingTableRequest bookingTableRequest)
         {
-            _bookingTableService.DeleteBooking(username);
+            _bookingTableService.DeleteBooking(bookingTableRequest);
         }
 
         [HttpGet("get-anniversary-type")]
@@ -77,14 +78,12 @@ namespace POSWindowFormAPI.Controllers
         [HttpPost("add-anniversary-type")]
         public ActionResult AddAnniversaryType(AnniversaryType anniversaryType)
         {
-            if (_bookingTableRepository.AddAnniversaryType(anniversaryType) == BookingTableConstant.RESULT_SUCCESS)
+            if (_bookingTableService.AddAnniversaryType(anniversaryType) == BookingTableConstant.RESULT_SUCCESS)
             {
-                _logger.LogInformation($"Done - {anniversaryType.TypeName}");
                 return Ok(anniversaryType);
             }
             else
             {
-                _logger.LogInformation($"Failed - {anniversaryType.TypeName}");
                 return BadRequest();
             }
         }

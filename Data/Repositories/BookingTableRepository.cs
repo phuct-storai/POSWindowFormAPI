@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using POSWindowFormAPI.Data.Constants;
 using POSWindowFormAPI.Data.Repositories.Interfaces;
 using POSWindowFormAPI.Models;
+using POSWindowFormAPI.Models.Request;
 using System.Data;
 using System.Data.SqlClient;
 using System.Security.Principal;
@@ -25,24 +26,25 @@ namespace POSWindowFormAPI.Data.Repositories
 
         // Booking Table
 
-        public string GetAllBookings(string today)
+        public async Task<string> GetAllBookings(string today)
         {
             //List<string> bookingList = new List<string>();
-            string query = "SELECT Name, People, PhoneNumber, Date, Time, Status " +
-                "FROM [dbo].[Bookings]" +
-                $"WHERE Date = {today}" +
-                "ORDER BY Date DESC, Time DESC";
-            using (IDbConnection connection = _sqlConnectionFactory.GetNewConnection())
+            string query = "SELECT [Name], [People], [PhoneNumber], [Date], [Time], [AnniversaryType], [Status], [Note]" +
+                        "FROM [PhoSaiGon].[dbo].[PSG_Bookings] " +
+                        $"WHERE Date = '{today}' " +
+                        "ORDER BY Date DESC, Time DESC ";
+            using (IDbConnection connection = _sqlConnectionFactory.GetOpenConnection())
             {
-                var bookingList = connection.ExecuteAsync(query);
+                var bookingList = await connection.QueryAsync(query);
+                return JsonConvert.SerializeObject(bookingList);
             }
-            return "Nice";
+            
         }
 
 
         public bool GetBookingByUsername(string username)
         {
-            string query = $"SELECT * FROM [dbo].[PSG_Bookings] WHERE Username = '{username}'";
+            string query = $"SELECT [Name], [People], [PhoneNumber], [Date], [Time], [Status] FROM [dbo].[PSG_Bookings] WHERE Username = '{username}'";
             using (IDbConnection connection = _sqlConnectionFactory.GetNewConnection())
             {
                 var bookingTable = connection.QueryFirstOrDefault(query);
@@ -194,18 +196,18 @@ namespace POSWindowFormAPI.Data.Repositories
             }
 
         }
-        public string DeleteBooking(string username)
+        public string DeleteBooking(BookingTableRequest bookingTableRequest)
         {
-            string query = $"DELETE FROM [dbo].[PSG_Accounts] WHERE Username = '{username}'";
+            string query = $"DELETE FROM [dbo].[PSG_Bookings] WHERE Username = '{bookingTableRequest.Name}'";
 
             try
             {
                 using (IDbConnection connection = _sqlConnectionFactory.GetNewConnection())
                 {
-                    if (GetBookingByUsername(username))
+                    if (GetBookingByUsername(bookingTableRequest.Name))
                     {
                         connection.Execute(query);
-                        _logger.LogInformation($"Account is Removed: {username}");
+                        _logger.LogInformation($"Account is Removed: {bookingTableRequest.Name}");
                         return BookingTableConstant.RESULT_SUCCESS;
                     }
                     else
@@ -255,7 +257,7 @@ namespace POSWindowFormAPI.Data.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                _logger.LogError(ex.ToString() + " - " + nameof(AddAnniversaryType) + " - " + BookingTableConstant.RESULT_FAILED);
                 return BookingTableConstant.RESULT_FAILED;
             }
         }
