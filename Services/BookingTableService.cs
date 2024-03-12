@@ -7,6 +7,7 @@ using POSWindowFormAPI.Models;
 using POSWindowFormAPI.Models.Request;
 using POSWindowFormAPI.Services.Interfaces;
 using System.Data;
+using System.Diagnostics.Contracts;
 
 namespace POSWindowFormAPI.Services
 {
@@ -28,9 +29,9 @@ namespace POSWindowFormAPI.Services
             _configuration = configuration;
         }
 
-        public string GetAllBookings()
+        public async Task<string> GetAllBookings()
         {
-            return _bookingTableRepository.GetAllBookings(DateTime.Now.ToString("d"));
+            return await _bookingTableRepository.GetAllBookings(DateTime.Now.ToString("MM/dd/yyyy"));
         }
 
         public string CreateBooking(BookingTableDetail bookingTableDetail)
@@ -64,14 +65,41 @@ namespace POSWindowFormAPI.Services
             _bookingTableRepository.UpdateBooking(name, bookingTableDetail);
 
         }
-        public void DeleteBooking(string name)
+        public void DeleteBooking(BookingTableRequest bookingTableRequest)
         {
-            _bookingTableRepository.DeleteBooking(name);
+            _bookingTableRepository.DeleteBooking(bookingTableRequest);
 
         }
         public bool GetByName(string name)
         {
             return true;
+        }
+
+        public string AddAnniversaryType(AnniversaryType anniversaryType)
+        {
+            //Add tracking
+            Tracking tracking = new Tracking
+            {
+                ActionId = Guid.NewGuid().ToString(),
+                Username = "Logged Username",
+                ActionType = TrackingConstant.CREATE_BOOKING,
+                ActionDetail = $"Create new Anniversary Type - {anniversaryType.TypeID}: {anniversaryType.TypeName}",
+                Date = DateTime.Now.ToString("G"),
+                Status = string.Empty
+            };
+
+            if (_bookingTableRepository.AddAnniversaryType(anniversaryType) == BookingTableConstant.RESULT_SUCCESS)
+            {
+                tracking.Status = TrackingConstant.SUCCESS;
+                _trackingRepository.AddTracking(tracking);
+            }
+
+            else
+            {
+                tracking.Status = TrackingConstant.FAILED;
+                _trackingRepository.AddTracking(tracking);
+            }
+            return tracking.Status;
         }
     }
 }
