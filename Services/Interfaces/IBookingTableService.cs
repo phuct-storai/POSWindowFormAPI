@@ -8,7 +8,7 @@ namespace POSWindowFormAPI.Services.Interfaces
         public Task<string> GetAllBookings();
         public string CreateBooking(BookingTableDetail bookingTableDetail);
         public void UpdateBooking(string name, BookingTableDetail bookingTableDetail);
-        public void DeleteBooking(BookingTableRequest bookingTableRequest);
+        public void DeleteBooking(string bookingId);
         public bool GetByName(string name);
         public string AddAnniversaryType(AnniversaryType anniversaryType);
     }

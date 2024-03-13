@@ -65,9 +65,9 @@ namespace POSWindowFormAPI.Services
             _bookingTableRepository.UpdateBooking(name, bookingTableDetail);
 
         }
-        public void DeleteBooking(BookingTableRequest bookingTableRequest)
+        public void DeleteBooking(string bookingId)
         {
-            _bookingTableRepository.DeleteBooking(bookingTableRequest);
+            _bookingTableRepository.DeleteBooking(bookingId);
 
         }
         public bool GetByName(string name)

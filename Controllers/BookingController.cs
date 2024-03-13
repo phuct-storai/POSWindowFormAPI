@@ -14,7 +14,7 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace POSWindowFormAPI.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class BookingController : ControllerBase
     {
@@ -57,10 +57,11 @@ namespace POSWindowFormAPI.Controllers
             _bookingTableService.UpdateBooking(name, bookingTableRequest);
         }
 
-        [HttpDelete("delete-booking/{name}-{phoneNumber}-{date}")]
-        public ActionResult DeleteBooking([FromRoute] BookingTableRequest bookingTableRequest)
+        //[HttpDelete("delete-booking/{int:id}")]
+        [HttpDelete("delete-booking/{bookingId}")]
+        public ActionResult DeleteBooking(string bookingId)
         {
-            _bookingTableService.DeleteBooking(bookingTableRequest);
+            _bookingTableService.DeleteBooking(bookingId);
             return Ok("OK");
         }
 

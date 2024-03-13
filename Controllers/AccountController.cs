@@ -6,7 +6,7 @@ using POSWindowFormAPI.Services.Interfaces;
 
 namespace POSWindowFormAPI.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
